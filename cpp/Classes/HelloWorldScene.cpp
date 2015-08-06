@@ -1,6 +1,91 @@
 #include "HelloWorldScene.h"
+#include "cocostudio/CocoStudio.h"
+#include "ui/CocosGUI.h"
+#include "PluginFacebook/PluginFacebook.h"
 
 USING_NS_CC;
+
+using namespace cocostudio::timeline;
+using namespace sdkbox;
+
+
+
+class MyFacebookListener : public FacebookListener
+{
+public:
+    MyFacebookListener(){}
+    
+    void onLogin(bool isLogin, const std::string& error)
+    {
+        CCLOG("##FB isLogin: %d, error: %s", isLogin, error.c_str());
+        std::string title = "login ";
+        title.append((isLogin ? "success" : "failed"));
+        MessageBox(error.c_str(), title.c_str());
+    }
+    void onAPI(const std::string& tag, const std::string& jsonData)
+    {
+        CCLOG("##FB onAPI: tag -> %s, json -> %s", tag.c_str(), jsonData.c_str());
+    }
+    void onSharedSuccess(const std::string& message)
+    {
+        CCLOG("##FB onSharedSuccess:%s", message.c_str());
+        
+        MessageBox(message.c_str(), "share success");
+    }
+    void onSharedFailed(const std::string& message)
+    {
+        CCLOG("##FB onSharedFailed:%s", message.c_str());
+        
+        MessageBox(message.c_str(), "share failed");
+    }
+    void onSharedCancel()
+    {
+        CCLOG("##FB onSharedCancel");
+        
+        MessageBox("", "share cancel");
+    }
+    void onPermission(bool isLogin, const std::string& error)
+    {
+        CCLOG("##FB onPermission: %d, error: %s", isLogin, error.c_str());
+        
+        std::string title = "permission ";
+        title.append((isLogin ? "success" : "failed"));
+        MessageBox(error.c_str(), title.c_str());
+    }
+//    void onFetchFriends(bool ok, const std::string& msg)
+//    {
+//        CCLOG("##FB %s: %d = %s", __FUNCTION__, ok, msg.data());
+//        
+//        const std::vector<sdkbox::FBGraphUser>& friends = PluginFacebook::getFriends();
+//        for (int i = 0; i < friends.size(); i++)
+//        {
+//            const sdkbox::FBGraphUser& user = friends.at(i);
+//            CCLOG("##FB> -------------------------------");
+//            CCLOG("##FB>> %s", user.uid.data());
+//            CCLOG("##FB>> %s", user.firstName.data());
+//            CCLOG("##FB>> %s", user.lastName.data());
+//            CCLOG("##FB>> %s", user.name.data());
+//            CCLOG("##FB>> %s", user.isInstalled ? "app is installed" : "app is not installed");
+//            CCLOG("##FB");
+//        }
+//        
+//        MessageBox("", "fetch friends");
+//    }
+};
+
+
+static void checkFaceBookStatus()
+{
+    CCLOG("##FB> permission list: ");
+    for (auto& permission : PluginFacebook::getPermissionList())
+    {
+        CCLOG("##FB>> permission %s", permission.data());
+    }
+    CCLOG("##FB> access token: %s", PluginFacebook::getAccessToken().c_str());
+    CCLOG("##FB> user id: %s", PluginFacebook::getUserID().c_str());
+    CCLOG("##FB> FBSDK version: %s", PluginFacebook::getSDKVersion().c_str());
+}
+
 
 Scene* HelloWorld::createScene()
 {
@@ -9,10 +94,10 @@ Scene* HelloWorld::createScene()
     
     // 'layer' is an autorelease object
     auto layer = HelloWorld::create();
-
+    
     // add layer as a child to scene
     scene->addChild(layer);
-
+    
     // return the scene
     return scene;
 }
@@ -27,60 +112,186 @@ bool HelloWorld::init()
         return false;
     }
     
-    Size visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
-
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+    FileUtils::getInstance()->addSearchPath("fonts");
     
-	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
-
-    // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
-
-    /////////////////////////////
-    // 3. add your codes below...
-
-    // add a label shows "Hello World"
-    // create and initialize a label
+    _captureFilename = "";
+    Size size = Director::getInstance()->getWinSize();
+    // ui
+    {
+        std::string defaultFont("arial.ttf");
+        int defaultFontSize = 32;
+        
+        auto loginItem = MenuItemLabel::create(Label::createWithTTF("login", defaultFont, defaultFontSize),
+                                               CC_CALLBACK_1(HelloWorld::onLogin, this));
+        auto logoutItem = MenuItemLabel::create(Label::createWithTTF("logout", defaultFont, defaultFontSize),
+                                                CC_CALLBACK_1(HelloWorld::onLogout, this));
+        
+        auto checkStatusItem = MenuItemLabel::create(Label::createWithTTF("check status", defaultFont, defaultFontSize),
+                                                     CC_CALLBACK_1(HelloWorld::onCheckStatus, this));
+        
+        
+        auto myInfoItem = MenuItemLabel::create(Label::createWithTTF("requestReadPermission", defaultFont, defaultFontSize),
+                                                CC_CALLBACK_1(HelloWorld::onRequestReadPermission, this));
+        
+        auto myFriendsItem = MenuItemLabel::create(Label::createWithTTF("requestPublishPermission", defaultFont, defaultFontSize),
+                                                   CC_CALLBACK_1(HelloWorld::onRequestPublishPermission, this));
+        
+        
+        auto captureScreenItem = MenuItemLabel::create(Label::createWithTTF("capture screen", defaultFont, defaultFontSize),
+                                                       CC_CALLBACK_1(HelloWorld::onCaptureScreen, this));
+        
+        
+        auto shareLink = MenuItemLabel::create(Label::createWithTTF("share link", defaultFont, defaultFontSize),
+                                               CC_CALLBACK_1(HelloWorld::onShareLink, this));
+        auto sharePhoto = MenuItemLabel::create(Label::createWithTTF("share photo", defaultFont, defaultFontSize),
+                                                CC_CALLBACK_1(HelloWorld::onSharePhoto, this));
+        
+        auto dialogLink = MenuItemLabel::create(Label::createWithTTF("dialog link", defaultFont, defaultFontSize),
+                                                CC_CALLBACK_1(HelloWorld::onDialogLink, this));
+        
+        auto dialogPhoto = MenuItemLabel::create(Label::createWithTTF("dialog photo(on device)", defaultFont, defaultFontSize),
+                                                 CC_CALLBACK_1(HelloWorld::onDialogPhoto, this));
+        
+        auto menu = Menu::create(loginItem, logoutItem, checkStatusItem,
+                                 myInfoItem, myFriendsItem,
+                                 captureScreenItem,
+                                 shareLink,sharePhoto,
+                                 dialogLink,dialogPhoto,
+                                 MenuItemLabel::create(Label::createWithTTF("my info", defaultFont, defaultFontSize),
+                                                       CC_CALLBACK_1(HelloWorld::onGetMyInfo, this)),
+                                 MenuItemLabel::create(Label::createWithTTF("my friends", defaultFont, defaultFontSize),
+                                                       CC_CALLBACK_1(HelloWorld::onGetMyFriends, this)),
+                                 NULL);
+        menu->alignItemsVerticallyWithPadding(5);
+        menu->setPosition(Vec2(size.width/2, size.height/2));
+        addChild(menu);
+        
+        Label *userLabel = Label::createWithTTF("user: aydghli_riceberg_1435809241@tfbnw.net", defaultFont, defaultFontSize);
+        userLabel->setPosition(Vec2(size.width/2, size.height - defaultFontSize));
+        addChild(userLabel);
+        Label *pwLabel = Label::createWithTTF("password: 123456", defaultFont, defaultFontSize);
+        pwLabel->setPosition(Vec2(size.width/2, size.height - defaultFontSize*2));
+        addChild(pwLabel);
+    }
     
-    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    
-    // position the label on the center of the screen
-    label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                            origin.y + visibleSize.height - label->getContentSize().height));
-
-    // add the label as a child to this layer
-    this->addChild(label, 1);
-
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-
-    // position the sprite on the center of the screen
-    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-    // add the sprite as a child to this layer
-    this->addChild(sprite, 0);
+    PluginFacebook::setListener(new MyFacebookListener);
+    PluginFacebook::init();
     
     return true;
 }
 
-
-void HelloWorld::menuCloseCallback(Ref* pSender)
+void HelloWorld::onLogin(cocos2d::Ref *sender)
 {
-    Director::getInstance()->end();
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
+    CCLOG("##FB %s", __FUNCTION__);
+    PluginFacebook::login();
+}
+void HelloWorld::onLogout(cocos2d::Ref *sender)
+{
+    CCLOG("##FB %s", __FUNCTION__);
+    PluginFacebook::logout();
+}
+void HelloWorld::onCheckStatus(cocos2d::Ref* sender)
+{
+    CCLOG("##FB %s", __FUNCTION__);
+    checkFaceBookStatus();
+}
+void HelloWorld::onGetMyInfo(cocos2d::Ref* sender)
+{
+    CCLOG("##FB %s", __FUNCTION__);
+    
+    PluginFacebook::FBAPIParam params;
+    PluginFacebook::api("me", "GET", params, "me");
+}
+void HelloWorld::onGetMyFriends(cocos2d::Ref* sender)
+{
+    CCLOG("##FB %s", __FUNCTION__);
+    
+//    PluginFacebook::fetchFriends();
+}
+void HelloWorld::onCaptureScreen(cocos2d::Ref *sender)
+{
+    CCLOG("##FB %s", __FUNCTION__);
+    
+    utils::captureScreen(CC_CALLBACK_2(HelloWorld::afterCaptureScreen, this), "screen.png");
+}
+void HelloWorld::afterCaptureScreen(bool yes, const std::string &outputFilename)
+{
+    CCLOG("##FB afterCaptureScreen: %s", outputFilename.c_str());
+    if (yes)
+    {
+        _captureFilename = outputFilename;
+    }
+}
+void HelloWorld::onShareLink(cocos2d::Ref* sender)
+{
+    CCLOG("##FB %s", __FUNCTION__);
+    
+    FBShareInfo info;
+    info.type  = FB_LINK;
+    info.link  = "http://www.cocos2d-x.org";
+    info.title = "cocos2d-x";
+    info.text  = "Best Game Engine";
+    info.image = "http://cocos2d-x.org/images/logo.png";
+    PluginFacebook::share(info);
+}
+void HelloWorld::onSharePhoto(cocos2d::Ref* sender)
+{
+    CCLOG("##FB %s", __FUNCTION__);
+    
+    if (!_captureFilename.empty() && FileUtils::getInstance()->isFileExist(_captureFilename))
+    {
+        CCLOG("##FB dialog photo: %s", _captureFilename.c_str());
+        
+        FBShareInfo info;
+        info.type  = FB_PHOTO;
+        info.title = "capture screen";
+        info.image = _captureFilename;
+        PluginFacebook::share(info);
+    }
+    else
+    {
+        CCLOG("##FB capture screen first");
+    }
+}
+void HelloWorld::onDialogLink(cocos2d::Ref* sender)
+{
+    CCLOG("##FB %s", __FUNCTION__);
+    
+    FBShareInfo info;
+    info.type  = FB_LINK;
+    info.link  = "http://www.cocos2d-x.org";
+    info.title = "cocos2d-x";
+    info.text  = "Best Game Engine";
+    info.image = "http://cocos2d-x.org/images/logo.png";
+    PluginFacebook::dialog(info);
+}
+void HelloWorld::onDialogPhoto(cocos2d::Ref* sender)
+{
+    CCLOG("##FB %s", __FUNCTION__);
+    
+    if (!_captureFilename.empty() && FileUtils::getInstance()->isFileExist(_captureFilename))
+    {
+        CCLOG("dialog photo: %s", _captureFilename.c_str());
+        FBShareInfo info;
+        info.type  = FB_PHOTO;
+        info.title = "capture screen";
+        info.image = _captureFilename;
+        PluginFacebook::dialog(info);
+    }
+    else
+    {
+        CCLOG("##FB capture screen first");
+    }
+}
+void HelloWorld::onRequestReadPermission(cocos2d::Ref *sender)
+{
+    CCLOG("##FB %s", __FUNCTION__);
+    
+    PluginFacebook::requestReadPermissions({FB_PERM_READ_USER_FRIENDS});
+}
+void HelloWorld::onRequestPublishPermission(cocos2d::Ref *sender)
+{
+    CCLOG("##FB %s", __FUNCTION__);
+    
+    PluginFacebook::requestPublishPermissions({FB_PERM_PUBLISH_POST});
 }
