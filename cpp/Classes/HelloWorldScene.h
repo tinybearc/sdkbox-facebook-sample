@@ -2,8 +2,9 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include "PluginFacebook/PluginFacebook.h"
 
-class HelloWorld : public cocos2d::Layer
+class HelloWorld : public cocos2d::Layer, sdkbox::FacebookListener
 {
 public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
@@ -15,8 +16,7 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
     
-    void onLogin(cocos2d::Ref* sender);
-    void onLogout(cocos2d::Ref* sender);
+    void onLoginClick(cocos2d::Ref* sender);
     void onCheckStatus(cocos2d::Ref* sender);
     void onGetMyInfo(cocos2d::Ref* sender);
     void onGetMyFriends(cocos2d::Ref* sender);
@@ -29,8 +29,19 @@ public:
     void onRequestPublishPermission(cocos2d::Ref* sender);
     
 private:
+    
+    //Facebook callback
+    void onLogin(bool isLogin, const std::string& msg);
+    void onSharedSuccess(const std::string& message);
+    void onSharedFailed(const std::string& message);
+    void onSharedCancel();
+    void onAPI(const std::string& key, const std::string& jsonData);
+    void onPermission(bool isLogin, const std::string& msg);
+    void onFetchFriends(bool ok, const std::string& msg);
+    
     void afterCaptureScreen(bool, const std::string& outputFilename);
     std::string _captureFilename;
+    cocos2d::MenuItemLabel* _loginItem;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

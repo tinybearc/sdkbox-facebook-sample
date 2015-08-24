@@ -9,71 +9,6 @@ using namespace cocostudio::timeline;
 using namespace sdkbox;
 
 
-
-class MyFacebookListener : public FacebookListener
-{
-public:
-    MyFacebookListener(){}
-    
-    void onLogin(bool isLogin, const std::string& error)
-    {
-        CCLOG("##FB isLogin: %d, error: %s", isLogin, error.c_str());
-        std::string title = "login ";
-        title.append((isLogin ? "success" : "failed"));
-        MessageBox(error.c_str(), title.c_str());
-    }
-    void onAPI(const std::string& tag, const std::string& jsonData)
-    {
-        CCLOG("##FB onAPI: tag -> %s, json -> %s", tag.c_str(), jsonData.c_str());
-    }
-    void onSharedSuccess(const std::string& message)
-    {
-        CCLOG("##FB onSharedSuccess:%s", message.c_str());
-        
-        MessageBox(message.c_str(), "share success");
-    }
-    void onSharedFailed(const std::string& message)
-    {
-        CCLOG("##FB onSharedFailed:%s", message.c_str());
-        
-        MessageBox(message.c_str(), "share failed");
-    }
-    void onSharedCancel()
-    {
-        CCLOG("##FB onSharedCancel");
-        
-        MessageBox("", "share cancel");
-    }
-    void onPermission(bool isLogin, const std::string& error)
-    {
-        CCLOG("##FB onPermission: %d, error: %s", isLogin, error.c_str());
-        
-        std::string title = "permission ";
-        title.append((isLogin ? "success" : "failed"));
-        MessageBox(error.c_str(), title.c_str());
-    }
-//    void onFetchFriends(bool ok, const std::string& msg)
-//    {
-//        CCLOG("##FB %s: %d = %s", __FUNCTION__, ok, msg.data());
-//        
-//        const std::vector<sdkbox::FBGraphUser>& friends = PluginFacebook::getFriends();
-//        for (int i = 0; i < friends.size(); i++)
-//        {
-//            const sdkbox::FBGraphUser& user = friends.at(i);
-//            CCLOG("##FB> -------------------------------");
-//            CCLOG("##FB>> %s", user.uid.data());
-//            CCLOG("##FB>> %s", user.firstName.data());
-//            CCLOG("##FB>> %s", user.lastName.data());
-//            CCLOG("##FB>> %s", user.name.data());
-//            CCLOG("##FB>> %s", user.isInstalled ? "app is installed" : "app is not installed");
-//            CCLOG("##FB");
-//        }
-//        
-//        MessageBox("", "fetch friends");
-//    }
-};
-
-
 static void checkFaceBookStatus()
 {
     CCLOG("##FB> permission list: ");
@@ -116,15 +51,26 @@ bool HelloWorld::init()
     
     _captureFilename = "";
     Size size = Director::getInstance()->getWinSize();
+    
+    PluginFacebook::setListener(this);
+    
     // ui
     {
         std::string defaultFont("arial.ttf");
         int defaultFontSize = 32;
         
-        auto loginItem = MenuItemLabel::create(Label::createWithTTF("login", defaultFont, defaultFontSize),
-                                               CC_CALLBACK_1(HelloWorld::onLogin, this));
-        auto logoutItem = MenuItemLabel::create(Label::createWithTTF("logout", defaultFont, defaultFontSize),
-                                                CC_CALLBACK_1(HelloWorld::onLogout, this));
+        std::string loginStat;
+        if (PluginFacebook::isLoggedIn())
+        {
+            loginStat = "Logout";
+        }
+        else
+        {
+            loginStat = "Login";
+        }
+        
+        _loginItem = MenuItemLabel::create(Label::createWithTTF(loginStat, defaultFont, defaultFontSize),
+                                               CC_CALLBACK_1(HelloWorld::onLoginClick, this));
         
         auto checkStatusItem = MenuItemLabel::create(Label::createWithTTF("check status", defaultFont, defaultFontSize),
                                                      CC_CALLBACK_1(HelloWorld::onCheckStatus, this));
@@ -152,7 +98,7 @@ bool HelloWorld::init()
         auto dialogPhoto = MenuItemLabel::create(Label::createWithTTF("dialog photo(on device)", defaultFont, defaultFontSize),
                                                  CC_CALLBACK_1(HelloWorld::onDialogPhoto, this));
         
-        auto menu = Menu::create(loginItem, logoutItem, checkStatusItem,
+        auto menu = Menu::create(_loginItem, checkStatusItem,
                                  myInfoItem, myFriendsItem,
                                  captureScreenItem,
                                  shareLink,sharePhoto,
@@ -174,22 +120,22 @@ bool HelloWorld::init()
         addChild(pwLabel);
     }
     
-    PluginFacebook::setListener(new MyFacebookListener);
-    PluginFacebook::init();
-    
     return true;
 }
 
-void HelloWorld::onLogin(cocos2d::Ref *sender)
+void HelloWorld::onLoginClick(cocos2d::Ref *sender)
 {
     CCLOG("##FB %s", __FUNCTION__);
-    PluginFacebook::login();
+    if (PluginFacebook::isLoggedIn())
+    {
+        PluginFacebook::logout();
+    }
+    else
+    {
+        PluginFacebook::login();
+    }
 }
-void HelloWorld::onLogout(cocos2d::Ref *sender)
-{
-    CCLOG("##FB %s", __FUNCTION__);
-    PluginFacebook::logout();
-}
+
 void HelloWorld::onCheckStatus(cocos2d::Ref* sender)
 {
     CCLOG("##FB %s", __FUNCTION__);
@@ -289,9 +235,76 @@ void HelloWorld::onRequestReadPermission(cocos2d::Ref *sender)
     
     PluginFacebook::requestReadPermissions({FB_PERM_READ_USER_FRIENDS});
 }
+
 void HelloWorld::onRequestPublishPermission(cocos2d::Ref *sender)
 {
     CCLOG("##FB %s", __FUNCTION__);
     
     PluginFacebook::requestPublishPermissions({FB_PERM_PUBLISH_POST});
+}
+
+/*********************
+ * Facebook callbacks
+ *********************/
+void HelloWorld::onLogin(bool isLogin, const std::string& error)
+{
+    CCLOG("##FB isLogin: %d, error: %s", isLogin, error.c_str());
+    
+    if (isLogin)
+    {
+        _loginItem->setString("Logout");
+    }
+    
+    std::string title = "login ";
+    title.append((isLogin ? "success" : "failed"));
+    MessageBox(error.c_str(), title.c_str());
+}
+void HelloWorld::onAPI(const std::string& tag, const std::string& jsonData)
+{
+    CCLOG("##FB onAPI: tag -> %s, json -> %s", tag.c_str(), jsonData.c_str());
+}
+void HelloWorld::onSharedSuccess(const std::string& message)
+{
+    CCLOG("##FB onSharedSuccess:%s", message.c_str());
+    
+    MessageBox(message.c_str(), "share success");
+}
+void HelloWorld::onSharedFailed(const std::string& message)
+{
+    CCLOG("##FB onSharedFailed:%s", message.c_str());
+    
+    MessageBox(message.c_str(), "share failed");
+}
+void HelloWorld::onSharedCancel()
+{
+    CCLOG("##FB onSharedCancel");
+    
+    MessageBox("", "share cancel");
+}
+void HelloWorld::onPermission(bool isLogin, const std::string& error)
+{
+    CCLOG("##FB onPermission: %d, error: %s", isLogin, error.c_str());
+    
+    std::string title = "permission ";
+    title.append((isLogin ? "success" : "failed"));
+    MessageBox(error.c_str(), title.c_str());
+}
+void HelloWorld::onFetchFriends(bool ok, const std::string& msg)
+{
+    CCLOG("##FB %s: %d = %s", __FUNCTION__, ok, msg.data());
+    
+    const std::vector<sdkbox::FBGraphUser>& friends = PluginFacebook::getFriends();
+    for (int i = 0; i < friends.size(); i++)
+    {
+        const sdkbox::FBGraphUser& user = friends.at(i);
+        CCLOG("##FB> -------------------------------");
+        CCLOG("##FB>> %s", user.uid.data());
+        CCLOG("##FB>> %s", user.firstName.data());
+        CCLOG("##FB>> %s", user.lastName.data());
+        CCLOG("##FB>> %s", user.name.data());
+        CCLOG("##FB>> %s", user.isInstalled ? "app is installed" : "app is not installed");
+        CCLOG("##FB");
+    }
+    
+    MessageBox("", "fetch friends");
 }
