@@ -19,6 +19,11 @@ void register_all_PluginFacebookJS(JSContext* cx, JSObject* obj);
 bool js_PluginFacebookJS_PluginFacebook_constructor(JSContext *cx, uint32_t argc, jsval *vp);
 void js_PluginFacebookJS_PluginFacebook_finalize(JSContext *cx, JSObject *obj);
 #if defined(MOZJS_MAJOR_VERSION)
+bool js_PluginFacebookJS_PluginFacebook_fetchFriends(JSContext *cx, uint32_t argc, jsval *vp);
+#elif defined(JS_VERSION)
+JSBool js_PluginFacebookJS_PluginFacebook_fetchFriends(JSContext *cx, uint32_t argc, jsval *vp);
+#endif
+#if defined(MOZJS_MAJOR_VERSION)
 bool js_PluginFacebookJS_PluginFacebook_getAccessToken(JSContext *cx, uint32_t argc, jsval *vp);
 #elif defined(JS_VERSION)
 JSBool js_PluginFacebookJS_PluginFacebook_getAccessToken(JSContext *cx, uint32_t argc, jsval *vp);

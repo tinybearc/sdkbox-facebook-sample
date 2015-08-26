@@ -104,6 +104,30 @@ JSClass  *jsb_sdkbox_PluginFacebook_class;
 JSObject *jsb_sdkbox_PluginFacebook_prototype;
 
 #if defined(MOZJS_MAJOR_VERSION)
+bool js_PluginFacebookJS_PluginFacebook_fetchFriends(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    if (argc == 0) {
+        sdkbox::PluginFacebook::fetchFriends();
+        args.rval().setUndefined();
+        return true;
+    }
+    JS_ReportError(cx, "js_PluginFacebookJS_PluginFacebook_fetchFriends : wrong number of arguments");
+    return false;
+}
+#elif defined(JS_VERSION)
+JSBool js_PluginFacebookJS_PluginFacebook_fetchFriends(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    if (argc == 0) {
+        sdkbox::PluginFacebook::fetchFriends();
+        JS_SET_RVAL(cx, vp, JSVAL_VOID);
+        return JS_TRUE;
+    }
+    JS_ReportError(cx, "wrong number of arguments");
+    return JS_FALSE;
+}
+#endif
+#if defined(MOZJS_MAJOR_VERSION)
 bool js_PluginFacebookJS_PluginFacebook_getAccessToken(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
@@ -330,6 +354,7 @@ void js_register_PluginFacebookJS_PluginFacebook(JSContext *cx, JS::HandleObject
     };
 
     static JSFunctionSpec st_funcs[] = {
+        JS_FN("fetchFriends", js_PluginFacebookJS_PluginFacebook_fetchFriends, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getAccessToken", js_PluginFacebookJS_PluginFacebook_getAccessToken, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getUserID", js_PluginFacebookJS_PluginFacebook_getUserID, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("init", js_PluginFacebookJS_PluginFacebook_init, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
@@ -391,6 +416,7 @@ void js_register_PluginFacebookJS_PluginFacebook(JSContext *cx, JSObject *global
     };
 
     static JSFunctionSpec st_funcs[] = {
+        JS_FN("fetchFriends", js_PluginFacebookJS_PluginFacebook_fetchFriends, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getAccessToken", js_PluginFacebookJS_PluginFacebook_getAccessToken, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getUserID", js_PluginFacebookJS_PluginFacebook_getUserID, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("init", js_PluginFacebookJS_PluginFacebook_init, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
@@ -448,6 +474,7 @@ void js_register_PluginFacebookJS_PluginFacebook(JSContext *cx, JSObject *global
     JSFunctionSpec *funcs = NULL;
 
     static JSFunctionSpec st_funcs[] = {
+        JS_FN("fetchFriends", js_PluginFacebookJS_PluginFacebook_fetchFriends, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getAccessToken", js_PluginFacebookJS_PluginFacebook_getAccessToken, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getUserID", js_PluginFacebookJS_PluginFacebook_getUserID, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("init", js_PluginFacebookJS_PluginFacebook_init, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),

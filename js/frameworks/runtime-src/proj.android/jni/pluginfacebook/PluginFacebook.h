@@ -16,6 +16,8 @@ namespace sdkbox
     const std::string FB_PERM_READ_EMAIL("email");
     const std::string FB_PERM_READ_USER_FRIENDS("user_friends");
     const std::string FB_PERM_PUBLISH_POST("publish_actions");
+    const std::string FB_API_ME_FRIENDS_TAG("__fb_me_friends__");
+    const std::string FB_API_ME_FRIENDS_PATH("me/friends");
 
     enum FBShareType
     {
@@ -38,6 +40,17 @@ namespace sdkbox
         std::string image;
     };
 
+    struct FBGraphUser
+    {
+        FBGraphUser();
+
+        std::string uid;
+        std::string name;
+        std::string firstName;
+        std::string lastName;
+        bool        isInstalled;
+    };
+
     class FacebookListener
     {
     public:
@@ -47,6 +60,7 @@ namespace sdkbox
         virtual void onSharedCancel() = 0;
         virtual void onAPI(const std::string& key, const std::string& jsonData) = 0;
         virtual void onPermission(bool isLogin, const std::string& msg) = 0;
+        virtual void onFetchFriends(bool ok, const std::string& msg) = 0;
     };
 
     class PluginFacebook
@@ -150,10 +164,20 @@ namespace sdkbox
          */
         static void api(const std::string& path, const std::string& method, const FBAPIParam& params, const std::string& tag);
 
+        /**
+         * @brief fetch friends data from Facebook
+         */
+        static void fetchFriends();
 
-#ifdef OBFUSCATED
-        _81930f7f522aff98dc79f62df0e7d59b
-#endif
+        /**
+         * @brief get friends info
+         */
+        static std::vector<FBGraphUser> getFriends();
+
+        /**
+         * @brief check whether can present Facebook App
+         */
+        static bool canPresentWithFBApp(const FBShareInfo& info);
     };
 }
 
