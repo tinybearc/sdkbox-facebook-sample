@@ -129,6 +129,7 @@ void HelloWorld::onLoginClick(cocos2d::Ref *sender)
     if (PluginFacebook::isLoggedIn())
     {
         PluginFacebook::logout();
+        _loginItem->setString("Login");
     }
     else
     {
