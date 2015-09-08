@@ -15,8 +15,8 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		2F1D4E3AB1F199B3A696C2A5 /* sdkbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 597F46C3BB474662DF34587A /* sdkbox.framework */; };
-		2FAA48C0BB7EDD100574E7A3 /* PluginFacebook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DC84867828BA52075E95E5B /* PluginFacebook.framework */; };
 		39EE471291EA9791CD92FCAA /* PluginFacebook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DC84867828BA52075E95E5B /* PluginFacebook.framework */; };
+		3B5DE86E1B9F952F0077C055 /* PluginFacebook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DC84867828BA52075E95E5B /* PluginFacebook.framework */; };
 		3EACC98F19EE6D4300EB3C5E /* res in Resources */ = {isa = PBXBuildFile; fileRef = 3EACC98E19EE6D4300EB3C5E /* res */; };
 		3EACC99019EE6D4300EB3C5E /* res in Resources */ = {isa = PBXBuildFile; fileRef = 3EACC98E19EE6D4300EB3C5E /* res */; };
 		4014447B930CA5CB3D7D800E /* sdkbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 597F46C3BB474662DF34587A /* sdkbox.framework */; };
@@ -171,7 +171,7 @@
 		59D6EB801B8E6C27008A0CE6 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/Frameworks/AdSupport.framework; sourceTree = DEVELOPER_DIR; };
 		6DC84867828BA52075E95E5B /* PluginFacebook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PluginFacebook.framework; sourceTree = "<group>"; };
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		AD524A0F9507AC1EE72AE6EA /* sdkbox_config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = sdkbox_config.json; path = "/Users/niteluo/Projects/test/cocos/sdkbox-facebook-sample/cpp/Resources/sdkbox_config.json"; sourceTree = "<absolute>"; };
+		AD524A0F9507AC1EE72AE6EA /* sdkbox_config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = sdkbox_config.json; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -200,7 +200,7 @@
 				D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */,
 				D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */,
 				4014447B930CA5CB3D7D800E /* sdkbox.framework in Frameworks */,
-				2FAA48C0BB7EDD100574E7A3 /* PluginFacebook.framework in Frameworks */,
+				3B5DE86E1B9F952F0077C055 /* PluginFacebook.framework in Frameworks */,
 				0ACD42B0B952DD9CF6AAAA78 /* FBSDKCoreKit.framework in Frameworks */,
 				491D4F7585577DE223B6C5C0 /* FBSDKLoginKit.framework in Frameworks */,
 				ACBC42DFA0E1E255A3822C30 /* FBSDKShareKit.framework in Frameworks */,
@@ -571,7 +571,10 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
-				FRAMEWORK_SEARCH_PATHS = "\"/Users/niteluo/Projects/test/cocos/sdkbox-facebook-sample/cpp/proj.ios_mac/\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"/Users/niteluo/Projects/test/cocos/sdkbox-facebook-sample/cpp/proj.ios_mac/",
+					"$(PROJECT_DIR)",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -614,7 +617,10 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
-				FRAMEWORK_SEARCH_PATHS = "\"/Users/niteluo/Projects/test/cocos/sdkbox-facebook-sample/cpp/proj.ios_mac/\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"/Users/niteluo/Projects/test/cocos/sdkbox-facebook-sample/cpp/proj.ios_mac/",
+					"$(PROJECT_DIR)",
+				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ios/Prefix.pch;
