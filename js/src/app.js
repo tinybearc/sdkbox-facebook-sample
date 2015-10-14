@@ -7,7 +7,6 @@ var HelloWorldLayer = cc.Layer.extend({
         this._super();
         var size = cc.winSize;
 
-        sdkbox.PluginFacebook.init();
         sdkbox.PluginFacebook.setListener({
             onLogin: function(isLogin, msg) {
               if(isLogin){
@@ -38,8 +37,61 @@ var HelloWorldLayer = cc.Layer.extend({
               else {
                 cc.log("request permission failed");
               }
-            }
+            },
+          onGetUserInfo : function( graphUser ) {
+              cc.log("OnGetUserInfo: ");
+              for( var i in graphUser ) {
+                  if ( graphUser.hasOwnProperty(i) ) {
+                      cc.log("  -> "+i+"="+graphUser[i]);
+                  }
+              }
+          },
+          onInviteFriendsResult : function(result, msg ) {
+              cc.log("'"+result+"'  '"+msg+"'")
+          },
+          onRequestInvitableFriends : function( obj ) {
+            /**
+             * obj is of the form:
+             * { 
+             *   data : [ {
+             *       <requested fields in the call to requestInvitableFriends>
+             *     } 
+             *    ],
+             *   paging : { 
+             *     next_url : string,
+             *     prev_url : string,
+             *     next_cursor : string,
+             *     prev_cursor : string
+             *   }
+             * }
+             */
+              cc.log("Invitation tokens: "+obj.data.length);
+              for( var i=0; i<obj.data.length; i++ ) {
+                var v= obj.data[i];
+                for( var j in v ) {
+                    cc.log( " "+j+"="+v[j]);
+                }
+              }
+              cc.log("Pagination data: "+ (obj.paging ? true : false));
+              if ( obj.paging ) {
+                  cc.log("  next_url: "+obj.paging.next_url );
+                  cc.log("  prev_url: "+obj.paging.prev_url );
+                  cc.log("  next_cursor: "+obj.paging.next_cursor );
+                  cc.log("  prev_cursor: "+obj.paging.prev_cursor );
+              }
+          }
         });
+        
+                                      var btnInvite = new cc.MenuItemFont("Invite", function(){
+                                                                          sdkbox.PluginFacebook.inviteFriends('https://play.google.com/store/apps/details?id=com.ideateca.android.ibasket', 'http://www.crusade-fan.com/ju_nen/one/ju_nen_1.gif');
+                                                                         }, this);
+                                      
+                                      
+                                      
+                                      var btnReqInvitable = new cc.MenuItemFont("RequestInvitableFriends", function(){
+                                                                                sdkbox.PluginFacebook.requestInvitableFriends({ 'fields' : 'first_name,id,email' });
+                                                                         }, this);
+                                      
 
         var btnLogin = new cc.MenuItemFont("Login", function(){
           sdkbox.PluginFacebook.login();
@@ -89,7 +141,7 @@ var HelloWorldLayer = cc.Layer.extend({
           sdkbox.PluginFacebook.dialog(info);
         }, this);
 
-        var menu = new cc.Menu(btnLogin, btnLogout, btnCheck, btnReadPerm, btnWritePerm, btnShareLink, btnDialogLink);
+        var menu = new cc.Menu(btnLogin, btnLogout, btnCheck, btnReadPerm, btnWritePerm, btnShareLink, btnDialogLink, btnInvite, btnReqInvitable);
         menu.x = size.width/2;
         menu.y = size.height/2;
         menu.alignItemsVerticallyWithPadding(5);
@@ -114,6 +166,9 @@ var HelloWorldLayer = cc.Layer.extend({
         cl_menu.y = 0;
         this.addChild(cl_menu, 1);
 
+
+        sdkbox.PluginFacebook.init();
+                                      
         return true;
     }
 });

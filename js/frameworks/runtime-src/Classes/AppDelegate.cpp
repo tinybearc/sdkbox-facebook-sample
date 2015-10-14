@@ -123,7 +123,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     sc->addRegisterCallback(register_all_cocos2dx_3d_extension);
     
     sc->addRegisterCallback(register_all_PluginFacebookJS);
-    sc->addRegisterCallback(register_PluginFacebookJS_helper);
+    sc->addRegisterCallback(register_all_PluginFacebookJS_helper);
     
 #if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
     // Physics 3d can be commented out to reduce the package
