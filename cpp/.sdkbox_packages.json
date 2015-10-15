@@ -3,7 +3,7 @@
         "engine": "3", 
         "constants": {
             "ANDROID_STUDIO_JNI_DIR": "proj.android-studio/app/jni/", 
-            "COCOS_BACKUP_DIR": "backup-2015-10-14/", 
+            "COCOS_BACKUP_DIR": "backup-2015-10-15/", 
             "COCOS_PROJECT_DIR": "./", 
             "ANDROID_COCOS_PACKAGE_ROOT": "cocos2d/cocos/platform/android/java/", 
             "facebook_lib": "cocos2d/cocos/platform/android/java/libs/facebook_lib/", 
@@ -19,7 +19,7 @@
             "COCOS_CLASSES_DIR": "Classes/", 
             "XCODE_PROJECT": "proj.ios_mac/cpp.xcodeproj/project.pbxproj", 
             "ANDROID_SDK_DIR": "/usr/local/opt/android-sdk/", 
-            "COCOS_2DX_ROOT": "/Applications/Cocos/frameworks/cocos2d-x-3.8.1/", 
+            "COCOS_2DX_ROOT": "/Applications/Cocos/frameworks/cocos2d-x-3.8/", 
             "ANDROID_MANIFEST": "proj.android/AndroidManifest.xml", 
             "ANDROID_STUDIO_MANIFEST": "proj.android-studio/app/AndroidManifest.xml", 
             "ANDROID_JNI_DIR": "proj.android/jni/", 
@@ -27,7 +27,7 @@
             "XCODE_PROJECT_CXX_LIBRARY": "libc++", 
             "ANDROID_STUDIO_MK": "proj.android-studio/app/jni/Android.mk", 
             "XCODE_PROJECT_DIR": "proj.ios_mac/cpp.xcodeproj/", 
-            "COCOS_2DX_VERSION": "3.8.0", 
+            "COCOS_2DX_VERSION": "3.7.0", 
             "ANDROID_PROPERTIES": "proj.android/project.properties", 
             "ANDROID_ACTIVITY_PATH": "proj.android/src/org/cocos2dx/cpp/", 
             "COCOS_RESOURCES_DIR": "Resources/", 
@@ -39,7 +39,7 @@
             1, 
             3, 
             1, 
-            6
+            7
         ], 
         "name": "facebook", 
         "args": {

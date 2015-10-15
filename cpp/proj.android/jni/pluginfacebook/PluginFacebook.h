@@ -216,14 +216,9 @@ namespace sdkbox
         virtual void onAPI(const std::string& key, const std::string& jsonData) = 0;
         virtual void onPermission(bool isLogin, const std::string& msg) = 0;
         virtual void onFetchFriends(bool ok, const std::string& msg) = 0;
-
-        /**
-         * invitable_friends_and_pagination_json_as_string has the following format:
-         *
-         */
-        virtual void onRequestInvitableFriends( const FBInvitableFriendsInfo& invitable_friends_and_pagination_json_as_string ) = 0;
-        virtual void onInviteFriendsWithInviteIdsResult( bool result, const std::string& description )= 0;
-        virtual void onInviteFriendsResult( bool result, const std::string& description )= 0;
+        virtual void onRequestInvitableFriends( const FBInvitableFriendsInfo& friends ) = 0;
+        virtual void onInviteFriendsWithInviteIdsResult( bool result, const std::string& msg )= 0;
+        virtual void onInviteFriendsResult( bool result, const std::string& msg )= 0;
 
         virtual void onGetUserInfo( const FBGraphUser& userInfo ) = 0;
     };
