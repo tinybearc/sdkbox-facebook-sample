@@ -56,9 +56,6 @@ bool HelloWorld::init()
     
     // ui
     {
-        std::string defaultFont("arial.ttf");
-        int defaultFontSize = 32;
-        
         std::string loginStat;
         if (PluginFacebook::isLoggedIn())
         {
@@ -69,54 +66,32 @@ bool HelloWorld::init()
             loginStat = "Login";
         }
         
-        _loginItem = MenuItemLabel::create(Label::createWithTTF(loginStat, defaultFont, defaultFontSize),
-                                               CC_CALLBACK_1(HelloWorld::onLoginClick, this));
+        _loginItem = MenuItemFont::create(loginStat, CC_CALLBACK_1(HelloWorld::onLoginClick, this));
         
-        auto checkStatusItem = MenuItemLabel::create(Label::createWithTTF("check status", defaultFont, defaultFontSize),
-                                                     CC_CALLBACK_1(HelloWorld::onCheckStatus, this));
-        
-        
-        auto myInfoItem = MenuItemLabel::create(Label::createWithTTF("requestReadPermission", defaultFont, defaultFontSize),
-                                                CC_CALLBACK_1(HelloWorld::onRequestReadPermission, this));
-        
-        auto myFriendsItem = MenuItemLabel::create(Label::createWithTTF("requestPublishPermission", defaultFont, defaultFontSize),
-                                                   CC_CALLBACK_1(HelloWorld::onRequestPublishPermission, this));
-        
-        
-        auto captureScreenItem = MenuItemLabel::create(Label::createWithTTF("capture screen", defaultFont, defaultFontSize),
-                                                       CC_CALLBACK_1(HelloWorld::onCaptureScreen, this));
-        
-        
-        auto shareLink = MenuItemLabel::create(Label::createWithTTF("share link", defaultFont, defaultFontSize),
-                                               CC_CALLBACK_1(HelloWorld::onShareLink, this));
-        auto sharePhoto = MenuItemLabel::create(Label::createWithTTF("share photo", defaultFont, defaultFontSize),
-                                                CC_CALLBACK_1(HelloWorld::onSharePhoto, this));
-        
-        auto dialogLink = MenuItemLabel::create(Label::createWithTTF("dialog link", defaultFont, defaultFontSize),
-                                                CC_CALLBACK_1(HelloWorld::onDialogLink, this));
-        
-        auto dialogPhoto = MenuItemLabel::create(Label::createWithTTF("dialog photo(on device)", defaultFont, defaultFontSize),
-                                                 CC_CALLBACK_1(HelloWorld::onDialogPhoto, this));
-        
-        auto menu = Menu::create(_loginItem, checkStatusItem,
-                                 myInfoItem, myFriendsItem,
-                                 captureScreenItem,
-                                 shareLink,sharePhoto,
-                                 dialogLink,dialogPhoto,
-                                 MenuItemLabel::create(Label::createWithTTF("my info", defaultFont, defaultFontSize),
-                                                       CC_CALLBACK_1(HelloWorld::onGetMyInfo, this)),
-                                 MenuItemLabel::create(Label::createWithTTF("my friends", defaultFont, defaultFontSize),
-                                                       CC_CALLBACK_1(HelloWorld::onGetMyFriends, this)),
+        auto menu = Menu::create(_loginItem,
+                                 MenuItemFont::create("check status", CC_CALLBACK_1(HelloWorld::onCheckStatus, this)),
+                                 MenuItemFont::create("requestReadPermission", CC_CALLBACK_1(HelloWorld::onRequestReadPermission, this)),
+                                 MenuItemFont::create("requestPublishPermission", CC_CALLBACK_1(HelloWorld::onRequestPublishPermission, this)),
+                                 MenuItemFont::create("capture screen", CC_CALLBACK_1(HelloWorld::onCaptureScreen, this)),
+                                 MenuItemFont::create("share link", CC_CALLBACK_1(HelloWorld::onShareLink, this)),
+                                 MenuItemFont::create("share photo", CC_CALLBACK_1(HelloWorld::onSharePhoto, this)),
+                                 MenuItemFont::create("dialog link", CC_CALLBACK_1(HelloWorld::onDialogLink, this)),
+                                 MenuItemFont::create("dialog photo(on device)", CC_CALLBACK_1(HelloWorld::onDialogPhoto, this)),
+                                 MenuItemFont::create("my info", CC_CALLBACK_1(HelloWorld::onGetMyInfo, this)),
+                                 MenuItemFont::create("my friends", CC_CALLBACK_1(HelloWorld::onGetMyFriends, this)),
+                                 MenuItemFont::create("invite friends", CC_CALLBACK_1(HelloWorld::onInviteFriends, this)),
                                  NULL);
+        
         menu->alignItemsVerticallyWithPadding(5);
         menu->setPosition(Vec2(size.width/2, size.height/2));
         addChild(menu);
         
-        Label *userLabel = Label::createWithTTF("user: aydghli_riceberg_1435809241@tfbnw.net", defaultFont, defaultFontSize);
-        userLabel->setPosition(Vec2(size.width/2, size.height - defaultFontSize));
+        Label *userLabel = Label::createWithTTF("user: aydghli_riceberg_1435809241@tfbnw.net", "arial.ttf", 32);
+        userLabel->setPosition(Vec2(size.width/2, size.height - 30));
         addChild(userLabel);
-        Label *pwLabel = Label::createWithTTF("password: 123456", defaultFont, defaultFontSize);
-        pwLabel->setPosition(Vec2(size.width/2, size.height - defaultFontSize*2));
+        
+        Label *pwLabel = Label::createWithTTF("password: 123456", "arial.ttf", 32);
+        pwLabel->setPosition(Vec2(size.width/2, size.height - 30*2));
         addChild(pwLabel);
     }
     
@@ -146,7 +121,7 @@ void HelloWorld::onGetMyInfo(cocos2d::Ref* sender)
 {
     CCLOG("##FB %s", __FUNCTION__);
     
-    PluginFacebook::FBAPIParam params;
+    sdkbox::FBAPIParam params;
     PluginFacebook::api("me", "GET", params, "me");
 }
 void HelloWorld::onGetMyFriends(cocos2d::Ref* sender)
@@ -244,6 +219,12 @@ void HelloWorld::onRequestPublishPermission(cocos2d::Ref *sender)
     PluginFacebook::requestPublishPermissions({FB_PERM_PUBLISH_POST});
 }
 
+void HelloWorld::onInviteFriends(cocos2d::Ref* sender )
+{
+    PluginFacebook::inviteFriends("https://play.google.com/store/apps/details?id=com.cocos2dx.PluginTest",
+                                  "http://www.cocos2d-x.org/attachments/802/cocos2dx_landscape.png");
+}
+
 /*********************
  * Facebook callbacks
  *********************/
@@ -308,4 +289,33 @@ void HelloWorld::onFetchFriends(bool ok, const std::string& msg)
     }
     
     MessageBox("", "fetch friends");
+}
+
+void HelloWorld::onRequestInvitableFriends( const FBInvitableFriendsInfo& friends )
+{
+    for (auto it = friends.begin(); it != friends.end(); ++it) {
+        CCLOG("Invitable friend: %s", it->getFirstName().c_str());
+    }
+}
+
+void HelloWorld::onInviteFriendsWithInviteIdsResult( bool result, const std::string& msg )
+{
+    CCLOG("on invite friends with invite ids %s= '%s'", result?"ok":"error", msg.c_str());
+}
+
+void HelloWorld::onInviteFriendsResult( bool result, const std::string& msg )
+{
+    CCLOG("on invite friends %s= '%s'", result?"ok":"error", msg.c_str());
+}
+
+void HelloWorld::onGetUserInfo( const sdkbox::FBGraphUser& userInfo )
+{
+    CCLOG("Facebook id:'%s' name:'%s' last_name:'%s' first_name:'%s' email:'%s' installed:'%d'",
+          userInfo.getUserId().c_str(),
+          userInfo.getName().c_str(),
+          userInfo.getFirstName().c_str(),
+          userInfo.getLastName().c_str(),
+          userInfo.getEmail().c_str(),
+          userInfo.isInstalled ? 1 : 0
+    );
 }
