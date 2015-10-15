@@ -519,7 +519,7 @@ JS_DefineFunction(cx, pluginObj, "canPresentWithFBApp", js_PluginFacebookJS_Plug
 
 #if defined(MOZJS_MAJOR_VERSION)
 #if MOZJS_MAJOR_VERSION >= 33
-void register_PluginFacebookJS_helper(JSContext* cx, JS::HandleObject global) {
+void register_all_PluginFacebookJS_helper(JSContext* cx, JS::HandleObject global) {
     // Get the ns
     JS::RootedObject pluginObj(cx);
     sdkbox::getJsObjOrCreat(cx, global, "sdkbox.PluginFacebook", &pluginObj);
@@ -527,7 +527,7 @@ void register_PluginFacebookJS_helper(JSContext* cx, JS::HandleObject global) {
     REGISTE_FACEBOOK_FUNCTIONS
 }
 #else
-void register_PluginFacebookJS_helper(JSContext* cx, JSObject* obj) {
+void register_all_PluginFacebookJS_helper(JSContext* cx, JSObject* obj) {
     // first, try to get the ns
     JS::RootedValue nsval(cx);
     JS::RootedObject pluginObj(cx);
@@ -556,7 +556,7 @@ void register_PluginFacebookJS_helper(JSContext* cx, JSObject* obj) {
 }
 #endif
 #elif defined(JS_VERSION)
-void register_PluginFacebookJS_helper(JSContext* cx, JSObject* global) {
+void register_all_PluginFacebookJS_helper(JSContext* cx, JSObject* global) {
     jsval pluginVal;
     JSObject* pluginObj;
     pluginVal = sdkbox::getJsObjOrCreat(cx, global, "sdkbox.PluginFacebook", &pluginObj);

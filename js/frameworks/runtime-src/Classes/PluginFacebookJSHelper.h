@@ -7,9 +7,9 @@
 
 
 #if MOZJS_MAJOR_VERSION >= 31
-void register_PluginFacebookJS_helper(JSContext* cx, JS::HandleObject global);
+void register_all_PluginFacebookJS_helper(JSContext* cx, JS::HandleObject global);
 #else
-void register_PluginFacebookJS_helper(JSContext* cx, JSObject* global);
+void register_all_PluginFacebookJS_helper(JSContext* cx, JSObject* global);
 #endif
 
 

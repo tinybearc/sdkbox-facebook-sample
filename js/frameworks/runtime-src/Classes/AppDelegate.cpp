@@ -41,6 +41,8 @@
 
 #include "PluginFacebookJS.hpp"
 #include "PluginFacebookJSHelper.h"
+#include "PluginFacebookJS.hpp"
+#include "PluginFacebookJSHelper.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
@@ -148,6 +150,9 @@ bool AppDelegate::applicationDidFinishLaunching()
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
     sc->addRegisterCallback(JavaScriptObjCBridge::_js_register);
 #endif
+
+    sc->addRegisterCallback(register_all_PluginFacebookJS);
+    sc->addRegisterCallback(register_all_PluginFacebookJS_helper);
     sc->start();    
     sc->runScript("script/jsb_boot.js");
     ScriptEngineProtocol *engine = ScriptingCore::getInstance();
