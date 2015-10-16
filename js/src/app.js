@@ -89,7 +89,13 @@ var HelloWorldLayer = cc.Layer.extend({
           sdkbox.PluginFacebook.dialog(info);
         }, this);
 
-        var menu = new cc.Menu(btnLogin, btnLogout, btnCheck, btnReadPerm, btnWritePerm, btnShareLink, btnDialogLink);
+        var btnInvite = new cc.MenuItemFont("Invite", function () {
+          sdkbox.PluginFacebook.inviteFriends(
+            "https://play.google.com/store/apps/details?id=com.cocos2dx.PluginTest",
+            "http://www.cocos2d-x.org/attachments/801/cocos2dx_portrait.png");
+        }, this);
+
+        var menu = new cc.Menu(btnLogin, btnLogout, btnCheck, btnReadPerm, btnWritePerm, btnShareLink, btnDialogLink, btnInvite);
         menu.x = size.width/2;
         menu.y = size.height/2;
         menu.alignItemsVerticallyWithPadding(5);
