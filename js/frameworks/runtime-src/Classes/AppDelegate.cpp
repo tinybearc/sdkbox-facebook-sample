@@ -41,6 +41,8 @@
 
 #include "PluginFacebookJS.hpp"
 #include "PluginFacebookJSHelper.h"
+#include "PluginFacebookJS.hpp"
+#include "PluginFacebookJSHelper.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
@@ -123,7 +125,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     sc->addRegisterCallback(register_all_cocos2dx_3d_extension);
     
     sc->addRegisterCallback(register_all_PluginFacebookJS);
-    sc->addRegisterCallback(register_PluginFacebookJS_helper);
+    sc->addRegisterCallback(register_all_PluginFacebookJS_helper);
     
 #if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
     // Physics 3d can be commented out to reduce the package
@@ -148,6 +150,9 @@ bool AppDelegate::applicationDidFinishLaunching()
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
     sc->addRegisterCallback(JavaScriptObjCBridge::_js_register);
 #endif
+
+    sc->addRegisterCallback(register_all_PluginFacebookJS);
+    sc->addRegisterCallback(register_all_PluginFacebookJS_helper);
     sc->start();    
     sc->runScript("script/jsb_boot.js");
     ScriptEngineProtocol *engine = ScriptingCore::getInstance();

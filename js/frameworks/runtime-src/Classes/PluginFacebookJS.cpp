@@ -2,6 +2,8 @@
 #include "cocos2d_specifics.hpp"
 #include "PluginFacebook/PluginFacebook.h"
 #include "SDKBoxJSHelper.h"
+#include "sdkbox/sdkbox.h"
+
 
 #if defined(MOZJS_MAJOR_VERSION)
 #if MOZJS_MAJOR_VERSION >= 33
@@ -104,23 +106,27 @@ JSClass  *jsb_sdkbox_PluginFacebook_class;
 JSObject *jsb_sdkbox_PluginFacebook_prototype;
 
 #if defined(MOZJS_MAJOR_VERSION)
-bool js_PluginFacebookJS_PluginFacebook_fetchFriends(JSContext *cx, uint32_t argc, jsval *vp)
+bool js_PluginFacebookJS_PluginFacebook_getSDKVersion(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     if (argc == 0) {
-        sdkbox::PluginFacebook::fetchFriends();
-        args.rval().setUndefined();
+        std::string ret = sdkbox::PluginFacebook::getSDKVersion();
+        jsval jsret = JSVAL_NULL;
+        jsret = std_string_to_jsval(cx, ret);
+        args.rval().set(jsret);
         return true;
     }
-    JS_ReportError(cx, "js_PluginFacebookJS_PluginFacebook_fetchFriends : wrong number of arguments");
+    JS_ReportError(cx, "js_PluginFacebookJS_PluginFacebook_getSDKVersion : wrong number of arguments");
     return false;
 }
 #elif defined(JS_VERSION)
-JSBool js_PluginFacebookJS_PluginFacebook_fetchFriends(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool js_PluginFacebookJS_PluginFacebook_getSDKVersion(JSContext *cx, uint32_t argc, jsval *vp)
 {
     if (argc == 0) {
-        sdkbox::PluginFacebook::fetchFriends();
-        JS_SET_RVAL(cx, vp, JSVAL_VOID);
+        std::string ret = sdkbox::PluginFacebook::getSDKVersion();
+        jsval jsret;
+        jsret = std_string_to_jsval(cx, ret);
+        JS_SET_RVAL(cx, vp, jsret);
         return JS_TRUE;
     }
     JS_ReportError(cx, "wrong number of arguments");
@@ -128,26 +134,26 @@ JSBool js_PluginFacebookJS_PluginFacebook_fetchFriends(JSContext *cx, uint32_t a
 }
 #endif
 #if defined(MOZJS_MAJOR_VERSION)
-bool js_PluginFacebookJS_PluginFacebook_getAccessToken(JSContext *cx, uint32_t argc, jsval *vp)
+bool js_PluginFacebookJS_PluginFacebook_isLoggedIn(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     if (argc == 0) {
-        std::string ret = sdkbox::PluginFacebook::getAccessToken();
+        bool ret = sdkbox::PluginFacebook::isLoggedIn();
         jsval jsret = JSVAL_NULL;
-        jsret = std_string_to_jsval(cx, ret);
+        jsret = BOOLEAN_TO_JSVAL(ret);
         args.rval().set(jsret);
         return true;
     }
-    JS_ReportError(cx, "js_PluginFacebookJS_PluginFacebook_getAccessToken : wrong number of arguments");
+    JS_ReportError(cx, "js_PluginFacebookJS_PluginFacebook_isLoggedIn : wrong number of arguments");
     return false;
 }
 #elif defined(JS_VERSION)
-JSBool js_PluginFacebookJS_PluginFacebook_getAccessToken(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool js_PluginFacebookJS_PluginFacebook_isLoggedIn(JSContext *cx, uint32_t argc, jsval *vp)
 {
     if (argc == 0) {
-        std::string ret = sdkbox::PluginFacebook::getAccessToken();
+        bool ret = sdkbox::PluginFacebook::isLoggedIn();
         jsval jsret;
-        jsret = std_string_to_jsval(cx, ret);
+        jsret = BOOLEAN_TO_JSVAL(ret);
         JS_SET_RVAL(cx, vp, jsret);
         return JS_TRUE;
     }
@@ -232,50 +238,22 @@ JSBool js_PluginFacebookJS_PluginFacebook_logout(JSContext *cx, uint32_t argc, j
 }
 #endif
 #if defined(MOZJS_MAJOR_VERSION)
-bool js_PluginFacebookJS_PluginFacebook_isLoggedIn(JSContext *cx, uint32_t argc, jsval *vp)
+bool js_PluginFacebookJS_PluginFacebook_fetchFriends(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     if (argc == 0) {
-        bool ret = sdkbox::PluginFacebook::isLoggedIn();
-        jsval jsret = JSVAL_NULL;
-        jsret = BOOLEAN_TO_JSVAL(ret);
-        args.rval().set(jsret);
-        return true;
-    }
-    JS_ReportError(cx, "js_PluginFacebookJS_PluginFacebook_isLoggedIn : wrong number of arguments");
-    return false;
-}
-#elif defined(JS_VERSION)
-JSBool js_PluginFacebookJS_PluginFacebook_isLoggedIn(JSContext *cx, uint32_t argc, jsval *vp)
-{
-    if (argc == 0) {
-        bool ret = sdkbox::PluginFacebook::isLoggedIn();
-        jsval jsret;
-        jsret = BOOLEAN_TO_JSVAL(ret);
-        JS_SET_RVAL(cx, vp, jsret);
-        return JS_TRUE;
-    }
-    JS_ReportError(cx, "wrong number of arguments");
-    return JS_FALSE;
-}
-#endif
-#if defined(MOZJS_MAJOR_VERSION)
-bool js_PluginFacebookJS_PluginFacebook_login(JSContext *cx, uint32_t argc, jsval *vp)
-{
-    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-    if (argc == 0) {
-        sdkbox::PluginFacebook::login();
+        sdkbox::PluginFacebook::fetchFriends();
         args.rval().setUndefined();
         return true;
     }
-    JS_ReportError(cx, "js_PluginFacebookJS_PluginFacebook_login : wrong number of arguments");
+    JS_ReportError(cx, "js_PluginFacebookJS_PluginFacebook_fetchFriends : wrong number of arguments");
     return false;
 }
 #elif defined(JS_VERSION)
-JSBool js_PluginFacebookJS_PluginFacebook_login(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool js_PluginFacebookJS_PluginFacebook_fetchFriends(JSContext *cx, uint32_t argc, jsval *vp)
 {
     if (argc == 0) {
-        sdkbox::PluginFacebook::login();
+        sdkbox::PluginFacebook::fetchFriends();
         JS_SET_RVAL(cx, vp, JSVAL_VOID);
         return JS_TRUE;
     }
@@ -283,25 +261,49 @@ JSBool js_PluginFacebookJS_PluginFacebook_login(JSContext *cx, uint32_t argc, js
     return JS_FALSE;
 }
 #endif
+bool js_PluginFacebookJS_PluginFacebook_login(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    bool ok = true;
+    
+    do {
+        if (argc == 1) {
+            std::vector<std::string> arg0;
+            ok &= jsval_to_std_vector_string(cx, args.get(0), &arg0);
+            if (!ok) { ok = true; break; }
+            sdkbox::PluginFacebook::login(arg0);
+            return true;
+        }
+    } while (0);
+    
+    do {
+        if (argc == 0) {
+            sdkbox::PluginFacebook::login();
+            return true;
+        }
+    } while (0);
+    JS_ReportError(cx, "js_PluginFacebookJS_PluginFacebook_login : wrong number of arguments");
+    return false;
+}
 #if defined(MOZJS_MAJOR_VERSION)
-bool js_PluginFacebookJS_PluginFacebook_getSDKVersion(JSContext *cx, uint32_t argc, jsval *vp)
+bool js_PluginFacebookJS_PluginFacebook_getAccessToken(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     if (argc == 0) {
-        std::string ret = sdkbox::PluginFacebook::getSDKVersion();
+        std::string ret = sdkbox::PluginFacebook::getAccessToken();
         jsval jsret = JSVAL_NULL;
         jsret = std_string_to_jsval(cx, ret);
         args.rval().set(jsret);
         return true;
     }
-    JS_ReportError(cx, "js_PluginFacebookJS_PluginFacebook_getSDKVersion : wrong number of arguments");
+    JS_ReportError(cx, "js_PluginFacebookJS_PluginFacebook_getAccessToken : wrong number of arguments");
     return false;
 }
 #elif defined(JS_VERSION)
-JSBool js_PluginFacebookJS_PluginFacebook_getSDKVersion(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool js_PluginFacebookJS_PluginFacebook_getAccessToken(JSContext *cx, uint32_t argc, jsval *vp)
 {
     if (argc == 0) {
-        std::string ret = sdkbox::PluginFacebook::getSDKVersion();
+        std::string ret = sdkbox::PluginFacebook::getAccessToken();
         jsval jsret;
         jsret = std_string_to_jsval(cx, ret);
         JS_SET_RVAL(cx, vp, jsret);
@@ -354,14 +356,14 @@ void js_register_PluginFacebookJS_PluginFacebook(JSContext *cx, JS::HandleObject
     };
 
     static JSFunctionSpec st_funcs[] = {
-        JS_FN("fetchFriends", js_PluginFacebookJS_PluginFacebook_fetchFriends, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("getAccessToken", js_PluginFacebookJS_PluginFacebook_getAccessToken, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("getSDKVersion", js_PluginFacebookJS_PluginFacebook_getSDKVersion, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("isLoggedIn", js_PluginFacebookJS_PluginFacebook_isLoggedIn, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getUserID", js_PluginFacebookJS_PluginFacebook_getUserID, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("init", js_PluginFacebookJS_PluginFacebook_init, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("logout", js_PluginFacebookJS_PluginFacebook_logout, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("isLoggedIn", js_PluginFacebookJS_PluginFacebook_isLoggedIn, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("fetchFriends", js_PluginFacebookJS_PluginFacebook_fetchFriends, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("login", js_PluginFacebookJS_PluginFacebook_login, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("getSDKVersion", js_PluginFacebookJS_PluginFacebook_getSDKVersion, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("getAccessToken", js_PluginFacebookJS_PluginFacebook_getAccessToken, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FS_END
     };
 
@@ -416,14 +418,14 @@ void js_register_PluginFacebookJS_PluginFacebook(JSContext *cx, JSObject *global
     };
 
     static JSFunctionSpec st_funcs[] = {
-        JS_FN("fetchFriends", js_PluginFacebookJS_PluginFacebook_fetchFriends, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("getAccessToken", js_PluginFacebookJS_PluginFacebook_getAccessToken, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("getSDKVersion", js_PluginFacebookJS_PluginFacebook_getSDKVersion, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("isLoggedIn", js_PluginFacebookJS_PluginFacebook_isLoggedIn, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getUserID", js_PluginFacebookJS_PluginFacebook_getUserID, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("init", js_PluginFacebookJS_PluginFacebook_init, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("logout", js_PluginFacebookJS_PluginFacebook_logout, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("isLoggedIn", js_PluginFacebookJS_PluginFacebook_isLoggedIn, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("fetchFriends", js_PluginFacebookJS_PluginFacebook_fetchFriends, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("login", js_PluginFacebookJS_PluginFacebook_login, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("getSDKVersion", js_PluginFacebookJS_PluginFacebook_getSDKVersion, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("getAccessToken", js_PluginFacebookJS_PluginFacebook_getAccessToken, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FS_END
     };
 
@@ -474,14 +476,14 @@ void js_register_PluginFacebookJS_PluginFacebook(JSContext *cx, JSObject *global
     JSFunctionSpec *funcs = NULL;
 
     static JSFunctionSpec st_funcs[] = {
-        JS_FN("fetchFriends", js_PluginFacebookJS_PluginFacebook_fetchFriends, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("getAccessToken", js_PluginFacebookJS_PluginFacebook_getAccessToken, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("getSDKVersion", js_PluginFacebookJS_PluginFacebook_getSDKVersion, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("isLoggedIn", js_PluginFacebookJS_PluginFacebook_isLoggedIn, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getUserID", js_PluginFacebookJS_PluginFacebook_getUserID, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("init", js_PluginFacebookJS_PluginFacebook_init, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("logout", js_PluginFacebookJS_PluginFacebook_logout, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("isLoggedIn", js_PluginFacebookJS_PluginFacebook_isLoggedIn, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("fetchFriends", js_PluginFacebookJS_PluginFacebook_fetchFriends, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("login", js_PluginFacebookJS_PluginFacebook_login, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("getSDKVersion", js_PluginFacebookJS_PluginFacebook_getSDKVersion, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("getAccessToken", js_PluginFacebookJS_PluginFacebook_getAccessToken, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FS_END
     };
 
@@ -521,6 +523,8 @@ void register_all_PluginFacebookJS(JSContext* cx, JS::HandleObject obj) {
     get_or_create_js_obj(cx, obj, "sdkbox", &ns);
 
     js_register_PluginFacebookJS_PluginFacebook(cx, ns);
+
+    sdkbox::setProjectType("js");
 }
 #else
 void register_all_PluginFacebookJS(JSContext* cx, JSObject* obj) {
@@ -538,6 +542,8 @@ void register_all_PluginFacebookJS(JSContext* cx, JSObject* obj) {
     obj = ns;
 
     js_register_PluginFacebookJS_PluginFacebook(cx, obj);
+
+    sdkbox::setProjectType("js");
 }
 #endif
 #elif defined(JS_VERSION)
@@ -556,5 +562,7 @@ void register_all_PluginFacebookJS(JSContext* cx, JSObject* obj) {
     obj = ns;
 
     js_register_PluginFacebookJS_PluginFacebook(cx, obj);
+
+    sdkbox::setProjectType("js");
 }
 #endif

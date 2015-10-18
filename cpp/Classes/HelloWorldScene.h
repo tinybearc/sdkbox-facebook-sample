@@ -27,6 +27,7 @@ public:
     void onDialogPhoto(cocos2d::Ref* sender);
     void onRequestReadPermission(cocos2d::Ref* sender);
     void onRequestPublishPermission(cocos2d::Ref* sender);
+    void onInviteFriends(cocos2d::Ref* sender);
     
 private:
     
@@ -38,6 +39,11 @@ private:
     void onAPI(const std::string& key, const std::string& jsonData);
     void onPermission(bool isLogin, const std::string& msg);
     void onFetchFriends(bool ok, const std::string& msg);
+    void onRequestInvitableFriends( const sdkbox::FBInvitableFriendsInfo& friends );
+    void onInviteFriendsWithInviteIdsResult( bool result, const std::string& msg );
+    void onInviteFriendsResult( bool result, const std::string& msg );
+    void onGetUserInfo( const sdkbox::FBGraphUser& userInfo );
+    
     
     void afterCaptureScreen(bool, const std::string& outputFilename);
     std::string _captureFilename;
