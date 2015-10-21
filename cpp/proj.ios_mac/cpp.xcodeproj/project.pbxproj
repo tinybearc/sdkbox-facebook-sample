@@ -431,7 +431,7 @@
 				LastUpgradeCheck = 0500;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = MDDB52YB8L;
+						DevelopmentTeam = 73DK4EWVQM;
 					};
 				};
 			};
@@ -571,6 +571,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"/Users/niteluo/Projects/test/cocos/sdkbox-facebook-sample/cpp/proj.ios_mac/",
 					"$(PROJECT_DIR)",
@@ -617,6 +618,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"/Users/niteluo/Projects/test/cocos/sdkbox-facebook-sample/cpp/proj.ios_mac/",
 					"$(PROJECT_DIR)",
