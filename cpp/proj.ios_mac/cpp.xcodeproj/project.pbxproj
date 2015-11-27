@@ -79,6 +79,7 @@
 		D44C620E132DFF430009C878 /* AVFoundation.framework */ = {isa = PBXBuildFile; fileRef = D44C620D132DFF430009C878 /* AVFoundation.framework */; };
 		D44C6210132DFF4E0009C878 /* AudioToolbox.framework */ = {isa = PBXBuildFile; fileRef = D44C620F132DFF4E0009C878 /* AudioToolbox.framework */; };
 		D6B0611B1803AB670077942B /* CoreMotion.framework */ = {isa = PBXBuildFile; fileRef = D6B0611A1803AB670077942B /* CoreMotion.framework */; };
+		ECDA42C0B32578F27C8B2B65 /* SystemConfiguration.framework */ = {isa = PBXBuildFile; fileRef = BC854650811EE928B51C6CCF /* SystemConfiguration.framework */; };
 		F0634D4F8D1B42C48B49534A /* FBSDKCoreKit.framework */ = {isa = PBXBuildFile; fileRef = 09EE4E46BF007558A6E50847 /* FBSDKCoreKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -141,6 +142,7 @@
 		6DC84867828BA52075E95E5B /* PluginFacebook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PluginFacebook.framework; sourceTree = "<group>"; };
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		AD524A0F9507AC1EE72AE6EA /* sdkbox_config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = sdkbox_config.json; sourceTree = "<group>"; };
+		BC854650811EE928B51C6CCF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = compiled.mach-o.dylib; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -173,6 +175,7 @@
 				0ACD42B0B952DD9CF6AAAA78 /* FBSDKCoreKit.framework */,
 				491D4F7585577DE223B6C5C0 /* FBSDKLoginKit.framework */,
 				ACBC42DFA0E1E255A3822C30 /* FBSDKShareKit.framework */,
+				ECDA42C0B32578F27C8B2B65 /* SystemConfiguration.framework */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,6 +278,7 @@
 				09EE4E46BF007558A6E50847 /* FBSDKCoreKit.framework */,
 				1BBD4BA69C68E48886D5D461 /* FBSDKLoginKit.framework */,
 				59874D42894FD0AA907388C4 /* FBSDKShareKit.framework */,
+				BC854650811EE928B51C6CCF /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

@@ -17,6 +17,7 @@
 		1AD7E0A918C9DBE3004817A6 /* main.js */ = {isa = PBXBuildFile; fileRef = 1A6BF21418C9DB5900FB0E1C /* main.js */; };
 		1AE159EC18C9DF3600FCA372 /* project.json */ = {isa = PBXBuildFile; fileRef = 1A1A081B18C9DF05005C6854 /* project.json */; };
 		296042B694C18C93D71842C2 /* FBSDKLoginKit.framework */ = {isa = PBXBuildFile; fileRef = 59504DBFB254D4B9FBB61EF6 /* FBSDKLoginKit.framework */; };
+		2BFB4E59AD2D31A48EC36EDA /* SystemConfiguration.framework */ = {isa = PBXBuildFile; fileRef = 89EE408E95D1C3940C12C488 /* SystemConfiguration.framework */; };
 		3B674740B14B2ECD5FDF6EDB /* sdkbox.framework */ = {isa = PBXBuildFile; fileRef = 225B41A48D62AF20D0C7886C /* sdkbox.framework */; };
 		429348FE84DBED9F617795FE /* FBSDKShareKit.framework */ = {isa = PBXBuildFile; fileRef = 0472462583245DA240FA4B1E /* FBSDKShareKit.framework */; };
 		502380DC17EBB88200990C9B /* libcurl.dylib */ = {isa = PBXBuildFile; fileRef = 502380DB17EBB88200990C9B /* libcurl.dylib */; };
@@ -133,6 +134,7 @@
 		593B100C1BF2D00900F1BAF6 /* PluginFacebook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PluginFacebook.framework; sourceTree = "<group>"; };
 		59504DBFB254D4B9FBB61EF6 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		59D6EB841B8E6ECB008A0CE6 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/Frameworks/AdSupport.framework; sourceTree = DEVELOPER_DIR; };
+		89EE408E95D1C3940C12C488 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
 		A922753D1517C094001B78AA /* js-mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = js-mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A92275411517C094001B78AA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A92275431517C094001B78AA /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -213,6 +215,7 @@
 				58084252BFC68FB66BE114D3 /* FBSDKCoreKit.framework */,
 				296042B694C18C93D71842C2 /* FBSDKLoginKit.framework */,
 				429348FE84DBED9F617795FE /* FBSDKShareKit.framework */,
+				2BFB4E59AD2D31A48EC36EDA /* SystemConfiguration.framework */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,6 +326,7 @@
 				E1594164B15106B84DFC79EA /* FBSDKCoreKit.framework */,
 				59504DBFB254D4B9FBB61EF6 /* FBSDKLoginKit.framework */,
 				0472462583245DA240FA4B1E /* FBSDKShareKit.framework */,
+				89EE408E95D1C3940C12C488 /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
