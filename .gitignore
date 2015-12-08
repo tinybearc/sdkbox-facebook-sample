@@ -32,3 +32,6 @@ DerivedData
 # Pods - for those of you who use CocoaPods
 Pods
 
+lua/frameworks/runtime-src/proj.android/libs/armeabi/gdb.setup
+lua/frameworks/runtime-src/proj.android/libs/armeabi/gdbserver
+lua/frameworks/runtime-src/proj.android/libs/armeabi/libcocos2dlua.so
