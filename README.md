@@ -1,6 +1,13 @@
 ## Contents
  * cpp folder contains sample for c++ project
  * js folder contains sample for js project
+ * lua folder contans sample for lua project
+ 
+   ```
+    ln -sv /Applications/Cocos/frameworks/cocos2d-x-3.6 cocos2d-x-3.6-lib
+    #or
+    git submodule update --init
+   ```
 
 ## Notice
 You have to create your own application in order to try out facebook functionality, because any app with posting functionality
