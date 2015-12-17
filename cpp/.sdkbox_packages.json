@@ -3,7 +3,7 @@
         "engine": "3", 
         "constants": {
             "ANDROID_STUDIO_JNI_DIR": "proj.android-studio/app/jni/", 
-            "COCOS_BACKUP_DIR": "backup-2015-12-03/", 
+            "COCOS_BACKUP_DIR": "backup-2015-12-17/", 
             "COCOS_PROJECT_DIR": "./", 
             "COCOS_2DX_INSTALLATION_VERSION": "3.7.0", 
             "ANDROID_COCOS_PACKAGE_ROOT": "cocos2d/cocos/platform/android/java/", 
@@ -41,25 +41,26 @@
         "version": [
             1, 
             5, 
-            0, 
-            3
+            1, 
+            4
         ], 
         "name": "facebook", 
         "args": {
             "patcherrors": 0, 
-            "project": "./", 
-            "nohelp": 0, 
-            "nopatchingcpp": 0, 
-            "verbose": 0, 
-            "noupdate": 0, 
-            "command": "update", 
-            "forcecopy": 1, 
-            "days": 10, 
-            "server": "download.sdkbox.com/installer/v1/", 
             "forcedownload": 0, 
-            "china": 0, 
-            "installer": "/Users/gbox/Documents/chukong_test/sdkbox-core/tools/installer/sdkbox/bin/sdkbox.pyc", 
+            "noupdate": 0, 
+            "days": 10, 
+            "verbose": 0, 
+            "forcecopy": 1, 
+            "command": "update", 
+            "nohelp": 0, 
+            "server": "download.sdkbox.com/installer/v1/", 
             "manifest": "manifest.json", 
+            "project": "./", 
+            "china": 0, 
+            "alwaysupdate": 0, 
+            "installer": "/Users/gbox/Documents/chukong_test/sdkbox/bin/sdkbox.pyc", 
+            "nopatchingcpp": 0, 
             "nopatching": 1, 
             "jsonapi": 0
         }
